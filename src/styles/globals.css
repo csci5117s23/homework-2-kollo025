@@ -1,4 +1,23 @@
-:root {
+body{
+  background-color:rgb(231, 217, 255);
+}
+
+.todoItem{
+  background-color:rgb(175, 149, 215);
+  margin: 1rem;
+  padding: 1rem;
+  border-radius: 1.5rem;
+}
+
+.margin-left{
+  margin-left: 0.5rem;
+}
+
+.header{
+  text-align: center;
+}
+
+/* :root {
   --max-width: 1100px;
   --border-radius: 12px;
   --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
@@ -104,4 +123,4 @@ a {
   html {
     color-scheme: dark;
   }
-}
+} */
