@@ -3,23 +3,22 @@ import { Inter } from 'next/font/google'
 import { useState, useEffect } from "react"
 import TodoList from '@/components/TodoList'
 import AddTodoItem from '@/components/AddTodoItem'
+import Categories from '@/components/Categories'
 import Link from 'next/link'
-
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function NotDoneTodos() {
-  const mockTodos = [{id: 1, content: "Clean room"}, {id: 2, content: "Wash dishes"}]
-  // maybe add a status key --> done/not-done
-
-  const API_ENDPOINT = "https://backend-ahul.api.codehooks.io/dev/todos"
+  // WRONG ORDER ??? 
+  const API_ENDPOINT = "https://backend-ahul.api.codehooks.io/dev/todos?done=false&sort=createdOn"
+  // const API_ENDPOINT = "https://backend-ahul.api.codehooks.io/dev/todosq={'done':false}&h={'fields': {'done': 1},'sort': {'createdOn': 1 }}"
   const API_KEY = "e54ecd9c-02c3-481f-a9ca-de4d5d6ecaa7"
 
   // Set states
   const [todos, setTodos] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Get todos
+  // Get not-done todos
   useEffect(() => {
     const fetchData = async () => {
       try{
@@ -41,7 +40,6 @@ export default function NotDoneTodos() {
     fetchData();
   }, [])
 
-
   if(loading){
     console.log("Loading")
   }
@@ -58,8 +56,7 @@ export default function NotDoneTodos() {
         <h1 className="header">
           To-do List
         </h1>
-        
-        {/* mockTodos should be replaced with only not done todos in db */}
+        <Categories></Categories>
         <TodoList todoItems={todos}></TodoList>
         <Link href="/done"><button>View Done To-do Items</button></Link>
         <AddTodoItem></AddTodoItem>
