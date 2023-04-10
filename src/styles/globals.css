@@ -17,3 +17,7 @@ body{
 .header{
   text-align: center;
 }
+
+header{
+  background-color:rgb(194, 171, 228);
+}

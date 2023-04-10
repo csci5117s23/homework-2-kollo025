@@ -1,11 +1,9 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
-
-const inter = Inter({ subsets: ['latin'] })
+import { ClerkProvider, useUser, useAuth, SignIn, SignedOut, SignedIn} from '@clerk/nextjs'
 
 export default function Home() {
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
+
   return (
     <>
       <Head>
@@ -14,9 +12,15 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
+      <h1>
         Sarah's To-do App
-      </div>
+      </h1>
+      <SignedOut>
+        <SignIn />
+      </SignedOut>
+      <SignedIn>
+        <div>hey</div>
+      </SignedIn>
     </>
   )
 }

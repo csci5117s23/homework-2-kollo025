@@ -1,37 +1,29 @@
 import Head from 'next/head'
 import { useState, useEffect } from "react"
+import { useAuth } from "@clerk/nextjs";
 import TodoList from '@/components/TodoList'
 import Link from 'next/link'
+import { getTodos } from "@/modules/Data";
+
 
 export default function DoneTodos() {
-  const API_ENDPOINT = "https://backend-ahul.api.codehooks.io/dev/todos?done=true"
-  const API_KEY = "e54ecd9c-02c3-481f-a9ca-de4d5d6ecaa7"
-
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
+  
   // Set states
   const [todos, setTodos] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Get done todos
   useEffect(() => {
-    const fetchData = async () => {
-      try{
-        const response = await fetch(API_ENDPOINT, {
-          'method':'GET',
-          'headers': {'x-apikey': API_KEY}
-        });
-        const data = await response.json();
-        console.log("Data: ", data);
-
-        // Update state
-        setTodos(data);
+    async function doneTodos() {
+      if (userId) {
+        const token = await getToken({ template: "codehooks" });
+        setTodos(await getTodos(token, true));
         setLoading(false);
       }
-      catch(err){
-        console.log("Error: ", err);
-      }
     }
-    fetchData();
-  }, [])
+    doneTodos();
+  }, [isLoaded]);
 
   if(loading){
     console.log("Loading")

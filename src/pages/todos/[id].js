@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from "react"
+import { useAuth } from "@clerk/nextjs";
+import { getTodo } from "@/modules/Data";
+
 import TodoItem from '@/components/TodoItem'
 
 export default function TodoID() {
@@ -14,42 +17,28 @@ export default function TodoID() {
     console.log("not an int")
   }
 
-  console.log(id)
-
-  const API_ENDPOINT = "https://backend-ahul.api.codehooks.io/dev/todos/"+id
-  const API_KEY = "e54ecd9c-02c3-481f-a9ca-de4d5d6ecaa7"
-
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
+  
   // Set states
   const [todo, setTodo] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Get not-done todos
+  // Get todo with specific id
   useEffect(() => {
-    const fetchData = async () => {
-      try{
-        const response = await fetch(API_ENDPOINT, {
-          'method':'GET',
-          'headers': {'x-apikey': API_KEY}
-        });
-        const data = await response.json();
-        console.log("Data: ", data);
-
-        // Update state
-        setTodo(data);
+    async function todoByID() {
+      if (userId) {
+        const token = await getToken({ template: "codehooks" });
+        setTodo(await getTodo(token, id));
         setLoading(false);
       }
-      catch(err){
-        console.log("Error: ", err);
-      }
     }
-    fetchData();
-  }, [])
+    todoByID();
+  }, [isLoaded]);
 
   if(loading){
     console.log("Loading")
   }
   else{
-    console.log(todo)
     return (
       <>
       <TodoItem id={todo._id} content={todo.content} status={todo.done} editable={true}></TodoItem>

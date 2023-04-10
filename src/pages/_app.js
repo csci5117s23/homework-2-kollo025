@@ -1,15 +1,42 @@
-import { ClerkProvider } from '@clerk/nextjs';
-
-// Importing global stylesheet - https://nextjs.org/docs/basic-features/built-in-css-support
+import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from '@clerk/nextjs';
+import Header from '@/components/Header.js';
+import { useRouter } from 'next/router';
 import '../styles/globals.css'
 
+const publicPages = ["/sign-in/[[...index]]", "/sign-up/[[...index]]", "/"];
 
-function MyApp({ Component, pageProps }) {
+// Reference: https://clerk.com/docs/nextjs/pages-react
+export default function MyApp({ Component, pageProps }) {
+  const { pathname } = useRouter();
+
+  // Check if the current route matches a public page
+  const isPublicPage = publicPages.includes(pathname);
+
+  // If the current route is listed as public, render it directly
+  // Otherwise, use Clerk to require authentication
   return (
-    <ClerkProvider {...pageProps} >
-      <Component {...pageProps} />
+    <ClerkProvider {...pageProps}>
+      <Header></Header>
+
+      {isPublicPage ? (
+        <Component {...pageProps} />
+      ) : (
+        <>
+          <SignedIn>
+            <Component {...pageProps} />
+          </SignedIn>
+          <SignedOut>
+            <RedirectToSignIn />
+          </SignedOut>
+        </>
+      )}
     </ClerkProvider>
   );
-}
 
-export default MyApp;
+  // return (
+  //   <ClerkProvider {...pageProps} >
+  //     <Header></Header>
+  //     <Component {...pageProps} />
+  //   </ClerkProvider>
+  // );
+}
