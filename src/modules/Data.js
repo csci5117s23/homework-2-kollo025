@@ -30,18 +30,33 @@ export async function addTodo(authToken, content) {
 }
 
 
+// PATCH or POST ???
+export async function updateTodoStatus(authToken, id, done) {
+    const result = await fetch(backend_base+"/todos/"+id,{
+        'method':'PATCH',
+        'headers': {'Authorization': 'Bearer ' + authToken,
+        'Content-Type': 'application/json'},
+        'body': JSON.stringify({'done': done})
+        })
+    return await result.json();
+}
+
+// PATCH or POST ???
+export async function updateTodoContent(authToken, id, newContent) {
+    const result = await fetch(backend_base+"/todos/"+id,{
+        'method':'PATCH',
+        'headers': {'Authorization': 'Bearer ' + authToken,
+        'Content-Type': 'application/json'},
+        'body': JSON.stringify({'content': newContent})
+        })
+    return await result.json();
+}
+
+
 // export async function deleteGroup(authToken, group) {
 //     const result = await fetch(backend_base+"/groups/"+group._id,{
 //         'method':'DELETE',
 //         'headers': {'Authorization': 'Bearer ' + authToken},
-//     })
-//     return await result.json();
-// }
-
-// export async function getReviews(authToken) {
-//     const result = await fetch(backend_base+"/pres",{
-//         'method':'GET',
-//         'headers': {'Authorization': 'Bearer ' + authToken}
 //     })
 //     return await result.json();
 // }
@@ -62,18 +77,6 @@ export async function addTodo(authToken, content) {
 //     } else {
 //         return null;
 //     }
-// }
-
-// export async function postReview(authToken, group, notes, score) {
-//     const result = await fetch(backend_base+"/pres", {
-//         'method':'POST',
-//         'headers': {'Authorization': 'Bearer ' + authToken,
-//         'Content-Type': 'application/json'},
-//         'body': JSON.stringify({group,
-//             notes,
-//             score})
-//     });
-//     return await result.json();
 // }
 
 

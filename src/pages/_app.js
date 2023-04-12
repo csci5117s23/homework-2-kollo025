@@ -17,7 +17,7 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <ClerkProvider {...pageProps}>
       <Header></Header>
-
+      <main>
       {isPublicPage ? (
         <Component {...pageProps} />
       ) : (
@@ -30,6 +30,7 @@ export default function MyApp({ Component, pageProps }) {
           </SignedOut>
         </>
       )}
+      </main>
     </ClerkProvider>
   );
 

@@ -3,7 +3,6 @@ import { useAuth } from "@clerk/nextjs";
 import { getTodos, addTodo } from "@/modules/Data";
 
 import TodoList from '@/components/TodoList'
-import AddTodoItem from '@/components/AddTodoItem'
 import Categories from '@/components/Categories'
 import Link from 'next/link'
 

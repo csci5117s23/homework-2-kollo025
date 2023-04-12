@@ -1,5 +1,10 @@
 body{
   background-color:rgb(231, 217, 255);
+  margin: 0;
+}
+
+main{
+  margin: 2rem;
 }
 
 .todoItem{
@@ -20,4 +25,5 @@ body{
 
 header{
   background-color:rgb(194, 171, 228);
+  border-bottom: 0.1rem solid rgb(249, 247, 252);
 }
