@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react"
 import TodoItem from './TodoItem';
-import { getTodos, addTodo } from "@/modules/Data";
+import { getTodosByCat, addTodo } from "@/modules/Data";
 import { useAuth } from "@clerk/nextjs";
 
-export default function TodoList({done}){ 
+export default function TodoListCategory({done, category}){ 
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [todoList, setTodoList] = useState([]);
   const [newTodo, setNewTodo] = useState("");
   const [loading, setLoading] = useState(true);
     
-  // Get todos
+  // Get todos by category
   useEffect(() => {
     async function todos() {
       if (userId) {
         const token = await getToken({ template: "codehooks" });
-        setTodoList(await getTodos(token, done));
+        setTodoList(await getTodosByCat(token, done, category));
         setLoading(false);
       }
     }

@@ -2,14 +2,11 @@ import { getCategories, addCategory } from "@/modules/Data";
 import { useState, useEffect } from "react"
 import { useAuth } from "@clerk/nextjs";
 
-
 export default function Categories(){ 
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [categoryList, setCategoryList] = useState([]);    
   const [loading, setLoading] = useState(true);
   const [newCategory, setNewCategory] = useState("");
-
-  const { isLoaded, userId, sessionId, getToken } = useAuth();
-
 
   // Get categories
   useEffect(() => {
@@ -24,7 +21,6 @@ export default function Categories(){
     categories();
   }, [isLoaded]);
 
-
   // Add a new category
   async function add() {
     const token = await getToken({ template: "codehooks" });
@@ -35,15 +31,16 @@ export default function Categories(){
     console.log("cat list: ", categoryList);
   }
 
+  if(loading){
+    return <div>Loading Categories</div>
+  }
 
-  if(!loading){
+  else{
     const htmlCategories = categoryList.map((item) => <li>{item.category}</li>);
-
     return<>
       <h1>Categories</h1>
       <div>
         {htmlCategories}
-        {/* {htmlTodoList} */}
         <h1>Add a New Category</h1>
         <input name="newCategory" placeholder="Category Name" value={newCategory} 
           onChange={(e) => setNewCategory(e.target.value)}
