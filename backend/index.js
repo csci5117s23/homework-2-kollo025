@@ -11,12 +11,19 @@ import jwtDecode from 'jwt-decode';
 
 // ADD USER_ID ???
 const todosYup = object({
-    //userId: string().required(),
+    userId: string().required(),
     content: string().required(),
+    category: string(),
     done: boolean().required().default(false),
     createdOn: date().required().default(() => new Date()),
 })
 
+
+// ADD USER_ID ???
+const categoriesYup = object({
+    userId: string().required(),
+    category: string().required(),
+})
 
 // This can largely be copy-pasted, it just grabs the authorization token and parses it, stashing it on the request.
 const userAuth = async (req, res, next) => {
@@ -50,6 +57,24 @@ app.use('/todos', (req, res, next) => {
     }
     next();
 })
+
+
+// some extra logic for GET / and POST / requests.
+app.use('/categories', (req, res, next) => {
+    if (req.method === "POST" || req.method === "PATCH") {
+        // always save authenticating user Id token.
+        // note -- were not enforcing uniqueness which isn't great.
+        // we don't currently have a great way to do this -- one option would be to 
+        // have a user collection track which collections have been filled
+        // It's a limitation for sure, but I'll just make that a front-end problem...
+        req.body.userId = req.user_token.sub
+    } else if (req.method === "GET") {
+        // on "index" -- always check for authentication.
+        req.query.userId = req.user_token.sub
+    }
+    next();
+})
+
 // some extra logic for GET /id and PUT /id DELETE /id PATCH /id requests.
 // side effect here will break patch patch by query, but that's OK for my purposes.
 app.use('/todos/:id', async (req, res, next) => {
@@ -61,7 +86,7 @@ app.use('/todos/:id', async (req, res, next) => {
         console.log(id);
         const doc = await conn.getOne('todos', id)
         if (doc.userId != userId) {
-            // authenticate duser doesn't own this document.
+            // authenticated user doesn't own this document.
             res.status(403).end(); // end is like "quit this request"
             return
         }
@@ -77,7 +102,7 @@ app.use('/todos/:id', async (req, res, next) => {
 
 
 // Use Crudlify to create a REST API for any collection
-crudlify(app, {todos: todosYup})
+crudlify(app, {todos: todosYup, categories: categoriesYup})
 
 // bind to serverless runtime
 export default app.init();

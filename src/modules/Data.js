@@ -52,6 +52,23 @@ export async function updateTodoContent(authToken, id, newContent) {
     return await result.json();
 }
 
+export async function getCategories(authToken) {
+    const result = await fetch(backend_base+"/categories",{
+        'method':'GET',
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
+    return await result.json();
+}
+
+export async function addCategory(authToken, category) {
+    const result = await fetch(backend_base+"/categories/",{
+        'method':'POST',
+        'headers': {'Authorization': 'Bearer ' + authToken,
+        'Content-Type': 'application/json'},
+        'body': JSON.stringify({'category': category})
+    })
+    return await result.json();
+}
 
 // export async function deleteGroup(authToken, group) {
 //     const result = await fetch(backend_base+"/groups/"+group._id,{

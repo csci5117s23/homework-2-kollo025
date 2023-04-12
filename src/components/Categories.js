@@ -1,39 +1,55 @@
+import { getCategories, addCategory } from "@/modules/Data";
 import { useState, useEffect } from "react"
-import TodoItem from './TodoItem';
+import { useAuth } from "@clerk/nextjs";
+
 
 export default function Categories(){ 
-    const [categoryList, setCategoryList] = useState(null);    
-    const [loading, setLoading] = useState(true);
+  const [categoryList, setCategoryList] = useState([]);    
+  const [loading, setLoading] = useState(true);
+  const [newCategory, setNewCategory] = useState("");
 
-    const API_ENDPOINT = "https://backend-ahul.api.codehooks.io/dev/categories"
-    const API_KEY = "e54ecd9c-02c3-481f-a9ca-de4d5d6ecaa7"
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
 
-  // Get not-done todos
+
+  // Get categories
   useEffect(() => {
-    const fetchData = async () => {
-      try{
-        const response = await fetch(API_ENDPOINT, {
-          'method':'GET',
-          'headers': {'x-apikey': API_KEY}
-        });
-        const data = await response.json();
-        console.log("Data: ", data);
-
-        // Update state
-        setCategoryList(data);
+    async function categories() {
+      if (userId) {
+        const token = await getToken({ template: "codehooks" });
+        setCategoryList(await getCategories(token));
         setLoading(false);
-      }
-      catch(err){
-        console.log("Error: ", err);
+        console.log("cats: ", categoryList) // ??? 
       }
     }
-    fetchData();
-  }, [])
+    categories();
+  }, [isLoaded]);
+
+
+  // Add a new category
+  async function add() {
+    const token = await getToken({ template: "codehooks" });
+    const newCat = await addCategory(token, newCategory);
+    console.log("new cat: ", newCat)
+    setNewCategory("");
+    setCategoryList(categoryList.concat(newCat));
+    console.log("cat list: ", categoryList);
+  }
+
+
+  if(!loading){
+    const htmlCategories = categoryList.map((item) => <li>{item.category}</li>);
 
     return<>
-        <h1>Categories</h1>
-        <div>
-            {/* {htmlTodoList} */}
-        </div>
+      <h1>Categories</h1>
+      <div>
+        {htmlCategories}
+        {/* {htmlTodoList} */}
+        <h1>Add a New Category</h1>
+        <input name="newCategory" placeholder="Category Name" value={newCategory} 
+          onChange={(e) => setNewCategory(e.target.value)}
+          onKeyDown={(e) => {if (e.key == 'Enter') {add()}}}/>
+        <button onClick={add}>Add</button>
+      </div>
     </>
+  }
 }
