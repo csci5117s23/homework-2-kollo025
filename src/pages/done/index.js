@@ -8,7 +8,7 @@ export default function DoneTodos() {
       Done To-dos
     </h1>
     <TodoList done={true}></TodoList>
-    <Link href="/todos"><button>View Not Done To-dos</button></Link>
+    <Link href="/todos"><button className="pure-button">View Not Done To-dos</button></Link>
     </>
   )
 }

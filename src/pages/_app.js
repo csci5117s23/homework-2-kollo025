@@ -14,7 +14,11 @@ export default function MyApp({ Component, pageProps }) {
 
   // If the current route is listed as public, render it directly
   // Otherwise, use Clerk to require authentication
-  return (
+  return (<>
+    {/* Pure CSS - Reference: https://purecss.io/start/ */}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+    
     <ClerkProvider {...pageProps}>
       <Header></Header>
       <main>
@@ -32,12 +36,6 @@ export default function MyApp({ Component, pageProps }) {
       )}
       </main>
     </ClerkProvider>
+  </>
   );
-
-  // return (
-  //   <ClerkProvider {...pageProps} >
-  //     <Header></Header>
-  //     <Component {...pageProps} />
-  //   </ClerkProvider>
-  // );
 }

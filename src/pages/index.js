@@ -1,4 +1,4 @@
-import { ClerkProvider, useUser, useAuth, SignIn, SignedOut, SignedIn} from '@clerk/nextjs'
+import { useAuth, SignIn, SignedOut, SignedIn} from '@clerk/nextjs'
 
 export default function Home() {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
@@ -9,7 +9,7 @@ export default function Home() {
         Sarah's To-do App
       </h1>
       <SignedOut>
-        <SignIn />
+        <SignIn redirectUrl={"/todos"}/>
       </SignedOut>
       <SignedIn>
         <div>Hello! Need to redirect to /todos ??? </div>

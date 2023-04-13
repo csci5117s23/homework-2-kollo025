@@ -1,4 +1,4 @@
-import { getCategories, addCategory } from "@/modules/Data";
+import { getCategories, addCategory, removeCategory } from "@/modules/Data";
 import { useState, useEffect } from "react"
 import { useAuth } from "@clerk/nextjs";
 
@@ -31,22 +31,41 @@ export default function Categories(){
     console.log("cat list: ", categoryList);
   }
 
+  // Delete a category
+  async function remove(id) {
+    const token = await getToken({ template: "codehooks" });
+    const newCat = await removeCategory(token, id);
+    console.log(newCat)
+    console.log("here")
+    console.log(categoryList)
+    // setCategoryList(categoryList.concat(newCat)); ???
+    // need to remove item ???
+  }
+
   if(loading){
     return <div>Loading Categories</div>
   }
 
   else{
-    const htmlCategories = categoryList.map((item) => <li>{item.category}</li>);
+    const htmlCategories = categoryList.map((item) => 
+      <div><li>{item.category}</li>
+      <button onClick={(e) => remove(item._id)}>delete</button></div>
+    );
     return<>
-      <h1>Categories</h1>
+      <h2>Categories</h2>
       <div>
         {htmlCategories}
-        <h1>Add a New Category</h1>
-        <input name="newCategory" placeholder="Category Name" value={newCategory} 
-          onChange={(e) => setNewCategory(e.target.value)}
-          onKeyDown={(e) => {if (e.key == 'Enter') {add()}}}/>
-        <button onClick={add}>Add</button>
       </div>
+      <h2>Add a New Category</h2>
+      <form className="pure-form">
+        <fieldset>
+          <legend>Add a New Category</legend>
+          <input name="newCategory" placeholder="Category Name" value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+            onKeyDown={(e) => {if (e.key == 'Enter') {add()}}}/>
+          <button type="button" onClick={add} className="pure-button pure-button-primary">Add</button>
+        </fieldset>
+      </form>
     </>
   }
 }

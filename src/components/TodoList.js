@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react"
 import TodoItem from './TodoItem';
-import { getTodos, addTodo } from "@/modules/Data";
+import { getTodos, addTodo, getCategories } from "@/modules/Data";
 import { useAuth } from "@clerk/nextjs";
 
 export default function TodoList({done}){ 
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [todoList, setTodoList] = useState([]);
+  const [categoryList, setCategoryList] = useState([]); // BADD ???
+
   const [newTodo, setNewTodo] = useState("");
   const [loading, setLoading] = useState(true);
     
@@ -15,10 +17,23 @@ export default function TodoList({done}){
       if (userId) {
         const token = await getToken({ template: "codehooks" });
         setTodoList(await getTodos(token, done));
-        setLoading(false);
+        // setLoading(false); // ???
       }
     }
     todos();
+  }, [isLoaded]);
+
+
+  // Get categories
+  useEffect(() => {
+    async function categories() {
+      if (userId) {
+        const token = await getToken({ template: "codehooks" });
+        setCategoryList(await getCategories(token));
+        setLoading(false);
+      }
+    }
+    categories();
   }, [isLoaded]);
 
   // Add a new todo item
@@ -41,11 +56,22 @@ export default function TodoList({done}){
     else{
       return <>
         <div>{htmlTodoList}</div>
-        <h1>Add a New Todo Item</h1>
-        <input name="newItem" placeholder="To-do Content" value={newTodo} 
-          onChange={(e) => setNewTodo(e.target.value)}
-          onKeyDown={(e) => {if (e.key == 'Enter') {add()}}}/>
-        <button onClick={add}>Add</button>
+        <h2>Add a New Todo Item</h2>
+        <form className="pure-form">
+          <fieldset>
+            <legend>Add New Todo Item</legend>
+            <input name="newItem" placeholder="Todo Content" value={newTodo}
+              onChange={(e) => setNewTodo(e.target.value)}
+              onKeyDown={(e) => {if (e.key == 'Enter') {add()}}}/>
+            <button type="button" onClick={add} className="pure-button pure-button-primary">Add</button>
+            <label for="category">Category</label>
+            <select id="category">
+              <option>AL</option>
+              <option>CA</option>
+              <option>IL</option>
+            </select>
+          </fieldset>
+        </form>
       </>
     }
   }

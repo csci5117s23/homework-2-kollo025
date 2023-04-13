@@ -70,6 +70,14 @@ export async function addCategory(authToken, category) {
     return await result.json();
 }
 
+export async function removeCategory(authToken, id) {
+    const result = await fetch(backend_base+"/categories/"+id,{
+        'method':'DELETE',
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
+    return await result.json();
+}
+
 export async function getTodosByCat(authToken, done, category) {
     const result = await fetch(backend_base+"/todos?sort=createdOn&done="+done+"&category="+category,{
         'method':'GET',
