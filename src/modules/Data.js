@@ -19,16 +19,15 @@ export async function getTodo(authToken, id) {
     return await result.json();
 }
 
-export async function addTodo(authToken, content) {
+export async function addTodo(authToken, content, category) {
     const result = await fetch(backend_base+"/todos/",{
         'method':'POST',
         'headers': {'Authorization': 'Bearer ' + authToken,
         'Content-Type': 'application/json'},
-        'body': JSON.stringify({'content': content})
+        'body': JSON.stringify({'content': content, 'category': category})
         })
     return await result.json();
 }
-
 
 // PATCH or POST ???
 export async function updateTodoStatus(authToken, id, done) {
@@ -48,6 +47,16 @@ export async function updateTodoContent(authToken, id, newContent) {
         'headers': {'Authorization': 'Bearer ' + authToken,
         'Content-Type': 'application/json'},
         'body': JSON.stringify({'content': newContent})
+        })
+    return await result.json();
+}
+
+export async function updateTodo(authToken, id, newContent, done, newCategory) {
+    const result = await fetch(backend_base+"/todos/"+id,{
+        'method':'PATCH',
+        'headers': {'Authorization': 'Bearer ' + authToken,
+        'Content-Type': 'application/json'},
+        'body': JSON.stringify({'content': newContent, 'done': done, 'category': newCategory})
         })
     return await result.json();
 }

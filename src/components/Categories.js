@@ -1,6 +1,7 @@
 import { getCategories, addCategory, removeCategory } from "@/modules/Data";
 import { useState, useEffect } from "react"
 import { useAuth } from "@clerk/nextjs";
+import Link from 'next/link'
 
 export default function Categories(){ 
   const { isLoaded, userId, sessionId, getToken } = useAuth();
@@ -48,15 +49,14 @@ export default function Categories(){
 
   else{
     const htmlCategories = categoryList.map((item) => 
-      <div><li>{item.category}</li>
+      <div><li><Link href={"/todos/"+item.category}>{item.category}</Link></li>
       <button onClick={(e) => remove(item._id)}>delete</button></div>
     );
     return<>
       <h2>Categories</h2>
-      <div>
+      <div className="margin">
         {htmlCategories}
       </div>
-      <h2>Add a New Category</h2>
       <form className="pure-form">
         <fieldset>
           <legend>Add a New Category</legend>

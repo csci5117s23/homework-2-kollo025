@@ -15,8 +15,8 @@ main{
   border: 0.1rem solid rgb(249, 247, 252);
 }
 
-.margin-left{
-  margin-left: 0.5rem;
+.margin{
+  margin: 0.5rem;
 }
 
 .header{

@@ -4,11 +4,12 @@ import { useState, useEffect } from "react"
 import { useAuth } from "@clerk/nextjs";
 import { getTodo } from "@/modules/Data";
 
-import TodoItem from '@/components/TodoItem'
+import EditableTodo from '@/components/EditableTodo'
 
 export default function TodoID() {
   const router = useRouter()
   const { id } = router.query
+  const isId = Number.isInteger(id);
 
   // ???
   if(Number.isInteger(id)){
@@ -37,13 +38,13 @@ export default function TodoID() {
   }, [isLoaded]);
 
   if(loading){
-    console.log("Loading")
+    return <div>Loading todo item</div>
   }
   else{
     return (
       <>
-      <TodoItem id={todo._id} content={todo.content} status={todo.done} editable={true}></TodoItem>
-      <Link href="/todos"><button>View Not Done To-dos</button></Link>
+      <EditableTodo id={todo._id} content={todo.content} status={todo.done} category={todo.category}></EditableTodo>
+      <Link href="/todos"><button className="pure-button">View Not Done To-dos</button></Link>
       </>
     )
   }
