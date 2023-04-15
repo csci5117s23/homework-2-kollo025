@@ -12,7 +12,7 @@ export default function Home() {
 
   return (
     <>
-      <h1>
+      <h1 className="header">
         Sarah's To-do App
       </h1>
       <SignedOut>

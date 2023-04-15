@@ -35,10 +35,10 @@ export default function Categories(){
   // Delete a category
   async function remove(id) {
     const token = await getToken({ template: "codehooks" });
-    const newCat = await removeCategory(token, id);
-    console.log(newCat)
-    console.log("here")
+    const cat = await removeCategory(token, id);
+    console.log(cat)
     console.log(categoryList)
+    console.log(categoryList.indexOf(cat))
     // setCategoryList(categoryList.concat(newCat)); ???
     // need to remove item ???
   }
@@ -49,8 +49,12 @@ export default function Categories(){
 
   else{
     const htmlCategories = categoryList.map((item) => 
-      <div><li><Link href={"/todos/"+item.category}>{item.category}</Link></li>
-      <button onClick={(e) => remove(item._id)}>delete</button></div>
+      <div>
+        <li><Link href={"/todos/"+item.category}>
+            {item.category}
+            <button className="pure-button margin" onClick={(e) => remove(item._id)}>Delete</button>
+          </Link></li>
+      </div>
     );
     return<>
       <h2>Categories</h2>
@@ -59,7 +63,7 @@ export default function Categories(){
       </div>
       <form className="pure-form">
         <fieldset>
-          <legend>Add a New Category</legend>
+          <legend>Add New Category</legend>
           <input name="newCategory" placeholder="Category Name" value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
             onKeyDown={(e) => {if (e.key == 'Enter') {add()}}}/>

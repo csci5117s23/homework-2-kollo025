@@ -9,16 +9,6 @@ import EditableTodo from '@/components/EditableTodo'
 export default function TodoID() {
   const router = useRouter()
   const { id } = router.query
-  const isId = Number.isInteger(id);
-
-  // ???
-  if(Number.isInteger(id)){
-    console.log("int")
-  }
-  else{
-    console.log("not an int")
-  }
-
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   
   // Set states

@@ -15,11 +15,12 @@ export default function TodoList({done, category}){
       if (userId) {
         const token = await getToken({ template: "codehooks" });
         if(category != null){
-          console.log(category)
-          setTodoList(await getTodosByCat(token, done, category));
+          let todos = (await getTodosByCat(token, done, category)).reverse();
+          setTodoList(todos)
         }
         else{
-          setTodoList(await getTodos(token, done));
+          let todos = (await getTodos(token, done)).reverse();
+          setTodoList(todos)
         }
         setLoading(false);
       }
@@ -32,13 +33,13 @@ export default function TodoList({done, category}){
     const token = await getToken({ template: "codehooks" });
     let newItem;
     if(category != null){
-      newItem = await addTodo(token, newTodo, category);
+      newItem = [await addTodo(token, newTodo, category)];
     }
     else{
-      newItem = await addTodo(token, newTodo);
+      newItem = [await addTodo(token, newTodo)];
     }
     setNewTodo("");
-    setTodoList(todoList.concat(newItem));
+    setTodoList(newItem.concat(todoList));
   }
 
   if(loading){
