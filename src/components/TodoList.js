@@ -43,11 +43,11 @@ export default function TodoList({done, category}){
   }
 
   if(loading){
-    return <div>Loading Todos</div>
+    return <div className="margin">Loading To-do Items...</div>
   }
 
   else{
-    const htmlTodoList = todoList.map((todoItem) => <TodoItem id={todoItem._id} content={todoItem.content} status={todoItem.done} editable={false}></TodoItem>)
+    const htmlTodoList = todoList.map((todoItem) => <TodoItem key={todoItem._id} id={todoItem._id} content={todoItem.content} status={todoItem.done} editable={false}></TodoItem>)
     // If these are done todos, don't include an add button
     if(done){
       return <div>{htmlTodoList}</div>
@@ -57,11 +57,11 @@ export default function TodoList({done, category}){
         <div>{htmlTodoList}</div>
         <form className="pure-form">
           <fieldset>
-            <legend>Add New Todo Item</legend>
+            <legend>Add New To-do Item</legend>
             <input name="newItem" placeholder="Todo Content" value={newTodo}
               onChange={(e) => setNewTodo(e.target.value)}
               onKeyDown={(e) => {if (e.key == 'Enter') {add()}}}/>
-            <button type="button" onClick={add} className="pure-button pure-button-primary">Add</button>
+            <button type="button" onClick={add} className="pure-button pure-button-primary button">Add</button>
           </fieldset>
         </form>
       </>

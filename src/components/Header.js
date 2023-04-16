@@ -1,7 +1,9 @@
-import {ClerkProvider, SignedIn, SignedOut, SignInButton, UserButton} from "@clerk/nextjs";
-  
+import {SignedIn, UserButton} from "@clerk/nextjs";
+import {Head} from 'next/head'
+
 export default function Header() {
   return (
+    <>
     <header
     style={{ display: "flex", justifyContent: "space-between", padding: 20 }}
     >
@@ -10,5 +12,6 @@ export default function Header() {
       <UserButton />
     </SignedIn>
     </header>
+    </>
   );
 }

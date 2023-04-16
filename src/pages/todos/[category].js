@@ -10,10 +10,10 @@ export default function TodosByCategory() {
   return (
     <>
     <h1 className="header">
-      Not Done To-dos - {category} Category
+      Not Done To-do Items - {category} Category
     </h1>
     <TodoList done={false} category={category}></TodoList>
-    <Link href="/todos"><button className="pure-button">View All Not Done Todos ??? </button></Link>
+    <Link href="/todos"><button className="pure-button">Not Done To-do Items</button></Link>
     </>
   )
 }

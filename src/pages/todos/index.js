@@ -11,7 +11,7 @@ export default function NotDoneTodos() {
     <Categories></Categories>
     <TodoList done={false}></TodoList>
     <div>
-      <Link href="/done"><button className="pure-button">View Done To-do Items</button></Link>
+      <Link href="/done"><button className="pure-button">Done To-do Items</button></Link>
     </div>
     </>
   )

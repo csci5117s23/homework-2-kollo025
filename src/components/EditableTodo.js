@@ -26,29 +26,24 @@ export default function EditableTodo({id, content, status, category}){
     e.preventDefault();
     let newContent = e.target.newItem.value;
     let newCategory = e.target.category.value
-    console.log(newCategory)
     const token = await getToken({ template: "codehooks" });
-    
-    const newItem = await updateTodo(token, id, newContent, done, newCategory);
+    await updateTodo(token, id, newContent, done, newCategory);
   }
 
   // Reference: https://codeflarelimited.com/blog/dynamically-populate-select-options-in-react-js/
   function getOptions() {
-    // return categoryList.map((cat) => {
-    //   return <option value={cat.category}>{cat.category}</option>;
-    // });
     return categoryList.map((cat) => { 
       if(category == cat.category){
-        return <option selected value={cat.category}>{cat.category}</option>;
+        return <option key={cat._id} selected value={cat.category}>{cat.category}</option>;
       }
       else{
-        return <option value={cat.category}>{cat.category}</option>;
+        return <option key={cat._id} value={cat.category}>{cat.category}</option>;
       }
     });
   }
   
   if(loading){
-    return <div>Loading Todo Item</div>
+    return <div className="margin">Loading Todo Item...</div>
   }
   else{
     return (
@@ -58,7 +53,7 @@ export default function EditableTodo({id, content, status, category}){
           <input className="margin" checked={done} type="checkbox" onChange={(e) => setDone(!done)}/>
           <textarea className="margin" name="newItem" defaultValue={content}/>
           <span>
-          <label className="margin" for="category">Category:</label>
+          <label className="margin" htmlFor="category">Category:</label>
             <select className="margin" name="category" id="category">
               <option>None</option>
               {getOptions()}
@@ -69,15 +64,5 @@ export default function EditableTodo({id, content, status, category}){
       </form>
       </>
     )
-
-    // <form className="pure-form">
-    //       <fieldset>
-    //         <legend>Add New Todo Item</legend>
-    //         <input name="newItem" placeholder="Todo Content" value={newTodo}
-    //           onChange={(e) => setNewTodo(e.target.value)}
-    //           onKeyDown={(e) => {if (e.key == 'Enter') {add()}}}/>
-    //         <button type="button" onClick={add} className="pure-button pure-button-primary">Add</button>
-    //       </fieldset>
-    //     </form>
   }
 }

@@ -5,10 +5,10 @@ export default function DoneTodos() {
   return (
     <>
     <h1 className="header">
-      Done To-dos
+      Done To-do Items
     </h1>
     <TodoList done={true}></TodoList>
-    <Link href="/todos"><button className="pure-button">View Not Done To-dos</button></Link>
+    <Link href="/todos"><button className="pure-button">Not Done To-do Items</button></Link>
     </>
   )
 }

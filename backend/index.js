@@ -47,7 +47,7 @@ app.use('/todos', (req, res, next) => {
 })
 
 app.use('/categories', (req, res, next) => {
-    if (req.method === "POST" || req.method === "PATCH") {
+    if (req.method === "POST" || req.method === "PATCH" || req.method === "DELETE") {
         req.body.userId = req.user_token.sub
     } else if (req.method === "GET") {
         req.query.userId = req.user_token.sub

@@ -28,3 +28,7 @@ header{
   background-color:rgb(194, 171, 228);
   border-bottom: 0.1rem solid rgb(249, 247, 252);
 }
+
+button{
+  background-color: cyan;
+}

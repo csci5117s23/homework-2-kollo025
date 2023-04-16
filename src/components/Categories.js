@@ -16,7 +16,6 @@ export default function Categories(){
         const token = await getToken({ template: "codehooks" });
         setCategoryList(await getCategories(token));
         setLoading(false);
-        console.log("cats: ", categoryList) // ??? 
       }
     }
     categories();
@@ -26,34 +25,33 @@ export default function Categories(){
   async function add() {
     const token = await getToken({ template: "codehooks" });
     const newCat = await addCategory(token, newCategory);
-    console.log("new cat: ", newCat)
     setNewCategory("");
     setCategoryList(categoryList.concat(newCat));
-    console.log("cat list: ", categoryList);
   }
 
   // Delete a category
   async function remove(id) {
     const token = await getToken({ template: "codehooks" });
-    const cat = await removeCategory(token, id);
-    console.log(cat)
-    console.log(categoryList)
-    console.log(categoryList.indexOf(cat))
-    // setCategoryList(categoryList.concat(newCat)); ???
-    // need to remove item ???
+    try{
+      await removeCategory(token, id);
+    }
+    catch(e){
+      console.log("Error deleting category: ", e);
+    }
+    setCategoryList(await getCategories(token));
   }
 
   if(loading){
-    return <div>Loading Categories</div>
+    return <div className="margin">Loading Categories...</div>
   }
 
   else{
     const htmlCategories = categoryList.map((item) => 
-      <div>
-        <li><Link href={"/todos/"+item.category}>
-            {item.category}
-            <button className="pure-button margin" onClick={(e) => remove(item._id)}>Delete</button>
-          </Link></li>
+      <div key={item._id}>
+        <li>
+          <Link href={"/todos/"+item.category}>{item.category}</Link>
+          <button type="buton" className="pure-button margin" onClick={(e) => remove(item._id)}>Delete</button>
+        </li>
       </div>
     );
     return<>
@@ -66,7 +64,7 @@ export default function Categories(){
           <legend>Add New Category</legend>
           <input name="newCategory" placeholder="Category Name" value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
-            onKeyDown={(e) => {if (e.key == 'Enter') {add()}}}/>
+            onKeyDown={(e) => {if (e.key === 'Enter') {add()}}}/>
           <button type="button" onClick={add} className="pure-button pure-button-primary">Add</button>
         </fieldset>
       </form>

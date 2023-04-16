@@ -28,13 +28,13 @@ export default function TodoID() {
   }, [isLoaded]);
 
   if(loading){
-    return <div>Loading todo item</div>
+    return <div>Loading to-do item...</div>
   }
   else{
     return (
       <>
       <EditableTodo id={todo._id} content={todo.content} status={todo.done} category={todo.category}></EditableTodo>
-      <Link href="/todos"><button className="pure-button">View Not Done To-dos</button></Link>
+      <Link href="/todos"><button className="pure-button">Not Done To-do Items</button></Link>
       </>
     )
   }
