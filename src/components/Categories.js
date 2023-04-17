@@ -31,6 +31,10 @@ export default function Categories(){
 
   // Delete a category
   async function remove(id) {
+    // Disable button after click
+    let btn = document.getElementById("deleteBtn");
+    btn.disabled = true;
+    
     const token = await getToken({ template: "codehooks" });
     try{
       await removeCategory(token, id);
@@ -39,6 +43,7 @@ export default function Categories(){
       console.log("Error deleting category: ", e);
     }
     setCategoryList(await getCategories(token));
+    btn.disabled = false;
   }
 
   if(loading){
@@ -64,8 +69,10 @@ export default function Categories(){
           <legend>Add New Category</legend>
           <input name="newCategory" placeholder="Category Name" value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
-            onKeyDown={(e) => {if (e.key === 'Enter') {add()}}}/>
-          <button type="button" onClick={add} className="pure-button pure-button-primary">Add</button>
+            onKeyDown={(e) => {if (e.key === 'Enter')
+              {e.preventDefault()
+              add()}}}/>
+          <button id="deleteBtn" type="button" onClick={add} className="pure-button pure-button-primary">Add</button>
         </fieldset>
       </form>
     </>

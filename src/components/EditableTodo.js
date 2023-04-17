@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { updateTodo, getCategories } from "@/modules/Data";
 import { useAuth } from "@clerk/nextjs";
+import { useRouter } from 'next/router';
 
 
 export default function EditableTodo({id, content, status, category}){ 
@@ -8,6 +9,7 @@ export default function EditableTodo({id, content, status, category}){
   const [done, setDone] = useState(status);
   const [categoryList, setCategoryList] = useState([]);    
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   // Get categories
   useEffect(() => {
@@ -24,21 +26,24 @@ export default function EditableTodo({id, content, status, category}){
   // Update to-do
   async function updateTodoItem(e){
     e.preventDefault();
+
+    // Disable button after submit
+    let btn = document.getElementById("saveBtn");
+    btn.disabled = true;
+
+    // Set new to-do information
     let newContent = e.target.newItem.value;
     let newCategory = e.target.category.value
     const token = await getToken({ template: "codehooks" });
     await updateTodo(token, id, newContent, done, newCategory);
+    btn.disabled = false;
+    router.push('/todos');
   }
 
   // Reference: https://codeflarelimited.com/blog/dynamically-populate-select-options-in-react-js/
   function getOptions() {
     return categoryList.map((cat) => { 
-      if(category == cat.category){
-        return <option key={cat._id} selected value={cat.category}>{cat.category}</option>;
-      }
-      else{
-        return <option key={cat._id} value={cat.category}>{cat.category}</option>;
-      }
+      return <option key={cat._id} value={cat.category}>{cat.category}</option>;
     });
   }
   
@@ -54,12 +59,12 @@ export default function EditableTodo({id, content, status, category}){
           <textarea className="margin" name="newItem" defaultValue={content}/>
           <span>
           <label className="margin" htmlFor="category">Category:</label>
-            <select className="margin" name="category" id="category">
+            <select defaultValue={category} className="margin" name="category" id="category">
               <option>None</option>
               {getOptions()}
             </select>
           </span>
-          <button className="pure-button pure-button-primary margin" type="submit">Save Changes</button>
+          <button id="saveBtn" className="pure-button pure-button-primary margin" type="submit">Save Changes</button>
         </div>
       </form>
       </>

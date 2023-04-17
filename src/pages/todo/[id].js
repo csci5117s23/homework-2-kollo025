@@ -19,9 +19,22 @@ export default function TodoID() {
   useEffect(() => {
     async function todoByID() {
       if (userId) {
-        const token = await getToken({ template: "codehooks" });
-        setTodo(await getTodo(token, id));
-        setLoading(false);
+        try{
+          const token = await getToken({ template: "codehooks" });
+          let item = await getTodo(token, id);
+
+          // This was not a valid to-do id
+          if(item.code){
+            router.push("/404")
+          }
+          else{
+            setTodo(item);
+            setLoading(false);
+          }
+        }
+        catch(e){
+          console.log("Error")
+        }
       }
     }
     todoByID();

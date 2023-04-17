@@ -1,8 +1,6 @@
 const backend_base = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 
-// ?done=false&sort=createdOn"
-
-// WRONG SORTING ORDER ???
+// Get todos by completion status
 export async function getTodos(authToken, done) {
     const result = await fetch(backend_base+"/todos?sort=createdOn&done="+done,{
         'method':'GET',
@@ -11,6 +9,16 @@ export async function getTodos(authToken, done) {
     return await result.json();
 }
 
+// Get all todos
+export async function getAllTodos(authToken) {
+    const result = await fetch(backend_base+"/todos?sort=createdOn",{
+        'method':'GET',
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
+    return await result.json();
+}
+
+// Get todo by id
 export async function getTodo(authToken, id) {
     const result = await fetch(backend_base+"/todos/"+id,{
         'method':'GET',
@@ -19,6 +27,16 @@ export async function getTodo(authToken, id) {
     return await result.json();
 }
 
+// Get todos by category
+export async function getTodosByCat(authToken, done, category) {
+    const result = await fetch(backend_base+"/todos?sort=createdOn&done="+done+"&category="+category,{
+        'method':'GET',
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
+    return await result.json();
+}
+
+// Add todo
 export async function addTodo(authToken, content, category) {
     const result = await fetch(backend_base+"/todos/",{
         'method':'POST',
@@ -29,7 +47,7 @@ export async function addTodo(authToken, content, category) {
     return await result.json();
 }
 
-// PATCH or POST ???
+// Update todo's completion status
 export async function updateTodoStatus(authToken, id, done) {
     const result = await fetch(backend_base+"/todos/"+id,{
         'method':'PATCH',
@@ -40,17 +58,7 @@ export async function updateTodoStatus(authToken, id, done) {
     return await result.json();
 }
 
-// PATCH or POST ???
-export async function updateTodoContent(authToken, id, newContent) {
-    const result = await fetch(backend_base+"/todos/"+id,{
-        'method':'PATCH',
-        'headers': {'Authorization': 'Bearer ' + authToken,
-        'Content-Type': 'application/json'},
-        'body': JSON.stringify({'content': newContent})
-        })
-    return await result.json();
-}
-
+// Update todo
 export async function updateTodo(authToken, id, newContent, done, newCategory) {
     const result = await fetch(backend_base+"/todos/"+id,{
         'method':'PATCH',
@@ -61,6 +69,7 @@ export async function updateTodo(authToken, id, newContent, done, newCategory) {
     return await result.json();
 }
 
+// Get all categories
 export async function getCategories(authToken) {
     const result = await fetch(backend_base+"/categories",{
         'method':'GET',
@@ -69,6 +78,7 @@ export async function getCategories(authToken) {
     return await result.json();
 }
 
+// Add category
 export async function addCategory(authToken, category) {
     const result = await fetch(backend_base+"/categories/",{
         'method':'POST',
@@ -79,6 +89,7 @@ export async function addCategory(authToken, category) {
     return await result.json();
 }
 
+// Delete category
 export async function removeCategory(authToken, id) {
     const result = await fetch(backend_base+"/categories/"+id,{
         'method':'DELETE',
@@ -86,50 +97,3 @@ export async function removeCategory(authToken, id) {
     })
     return await result.json();
 }
-
-export async function getTodosByCat(authToken, done, category) {
-    const result = await fetch(backend_base+"/todos?sort=createdOn&done="+done+"&category="+category,{
-        'method':'GET',
-        'headers': {'Authorization': 'Bearer ' + authToken}
-    })
-    return await result.json();
-}
-
-
-// export async function deleteGroup(authToken, group) {
-//     const result = await fetch(backend_base+"/groups/"+group._id,{
-//         'method':'DELETE',
-//         'headers': {'Authorization': 'Bearer ' + authToken},
-//     })
-//     return await result.json();
-// }
-
-// export async function getReview(authToken, group) {
-    
-//     const result = await fetch(backend_base+"/pres?" + new URLSearchParams({group}), {
-//         'method':'GET',
-//         'headers': {'Authorization': 'Bearer ' + authToken}
-//     })
-//     if (result.ok) {
-//         const reviews =  await result.json();
-//         if (reviews.length >0) {
-//             return reviews[0]
-//         } else {
-//             return null
-//         }
-//     } else {
-//         return null;
-//     }
-// }
-
-
-
-// export async function updateReview(authToken, review) {
-//     const result = await fetch(backend_base+"/pres/"+review._id, {
-//         'method':'PUT',
-//         'headers': {'Authorization': 'Bearer ' + authToken,
-//         'Content-Type': 'application/json'},
-//         'body': JSON.stringify(review)
-//     });
-//     return await result.json();
-// }

@@ -60,7 +60,9 @@ export default function TodoList({done, category}){
             <legend>Add New To-do Item</legend>
             <input name="newItem" placeholder="Todo Content" value={newTodo}
               onChange={(e) => setNewTodo(e.target.value)}
-              onKeyDown={(e) => {if (e.key == 'Enter') {add()}}}/>
+              onKeyDown={(e) => {if (e.key == 'Enter') 
+                {e.preventDefault()
+                add()}}}/>
             <button type="button" onClick={add} className="pure-button pure-button-primary button">Add</button>
           </fieldset>
         </form>
